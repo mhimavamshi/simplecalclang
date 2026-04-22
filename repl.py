@@ -1,14 +1,22 @@
 import readline
 
-operators = {"+", "-", "*", "/"}
+operators = {"+": "plus", "-": "minus", "*": "multiply", "/": "divide"}
 
 def infer_type(pre):
     if pre.isdigit(): return "int"
-    if pre in operators: return "operator"
+    if pre in operators: return f"operator.{operators[pre]}"
     if pre.isspace(): return "space"
     if pre == ")": return "rparen"
     if pre == "(": return "lparen"
     return None
+
+def can_accumulate(pre, post):
+    if pre == "operator.minus" and post == "int":
+        return True
+    if pre == "int" and post == "int":
+        return True
+    return False
+
 
 def merge(state, chars):
     return (state, "".join(chars))
@@ -37,10 +45,10 @@ def tokenize(expression):
   
         curr_type = infer_type(char)
         next_type = infer_type(next_char)
-        same = (curr_type == next_type) 
+        accumulate = can_accumulate(curr_type, next_type) 
 
 
-        if not same:
+        if not accumulate:
             if not (curr_type == "space"):
                 token = merge(curr_type, store)
                 tokens.append(token)
