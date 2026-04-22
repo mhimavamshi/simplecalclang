@@ -5,6 +5,8 @@ def infer_type(pre):
     if pre.isdigit(): pre_type = "int"
     if pre in operators: pre_type = "operator"
     if pre.isspace(): pre_type = "space"
+    if pre == ")": pre_type = "rparen"
+    if pre == "(": pre_type = "lparen"
     return pre_type
 
 
@@ -42,7 +44,6 @@ def tokenize(expression):
             if not (curr_type == "space"):
                 token = merge(curr_type, store)
                 tokens.append(token)
-            print("tokens so far:", tokens)
             store = []
     
     if store:
