@@ -1,14 +1,14 @@
+import readline
+
 operators = {"+", "-", "*", "/"}
 
 def infer_type(pre):
-    pre_type = None
-    if pre.isdigit(): pre_type = "int"
-    if pre in operators: pre_type = "operator"
-    if pre.isspace(): pre_type = "space"
-    if pre == ")": pre_type = "rparen"
-    if pre == "(": pre_type = "lparen"
-    return pre_type
-
+    if pre.isdigit(): return "int"
+    if pre in operators: return "operator"
+    if pre.isspace(): return "space"
+    if pre == ")": return "rparen"
+    if pre == "(": return "lparen"
+    return None
 
 def merge(state, chars):
     return (state, "".join(chars))
