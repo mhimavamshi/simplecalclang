@@ -1,12 +1,19 @@
 operators = {"+": "plus", "-": "minus", "*": "multiply", "/": "divide"}
 
+
 def infer_type(pre):
-    if pre.isdigit(): return "int"
-    if pre in operators: return f"operator.{operators[pre]}"
-    if pre.isspace(): return "space"
-    if pre == ")": return "rparen"
-    if pre == "(": return "lparen"
+    if pre.isdigit():
+        return "int"
+    if pre in operators:
+        return f"operator.{operators[pre]}"
+    if pre.isspace():
+        return "space"
+    if pre == ")":
+        return "rparen"
+    if pre == "(":
+        return "lparen"
     return None
+
 
 def can_accumulate(pre, post):
     if pre == "operator.minus" and post == "int":
@@ -19,34 +26,54 @@ def can_accumulate(pre, post):
 def merge(state, chars):
     return (state, "".join(chars))
 
+
+def validate_paren_tokens(tokens):
+    balance = 0
+
+    for token_type, value, _ in tokens:
+        if token_type == "lparen":
+            balance += 1
+        elif token_type == "rparen":
+            balance -= 1
+            if balance < 0:
+                return False
+
+    return balance == 0
+
+
 def tokenize(expression):
-    tokens = [] 
-    store = []  
+    tokens = []
+    store = []
     zeroed_length = len(expression) - 1
 
     for index, char in enumerate(expression):
         store.append(char)
 
         # look ahead instead of current character
-        next_char = expression[index+1] if index+1 <= zeroed_length else None
+        next_char = expression[index + 1] if index + 1 <= zeroed_length else None
         if not next_char:
             break
-  
+
         curr_type = infer_type(char)
         next_type = infer_type(next_char)
-        accumulate = can_accumulate(curr_type, next_type) 
-
+        accumulate = can_accumulate(curr_type, next_type)
 
         if not accumulate:
             if not (curr_type == "space"):
                 token = merge(curr_type, store)
                 tokens.append(token)
             store = []
-    
+
     if store:
         curr_type = infer_type(store[-1])
         if not (curr_type == "space"):
             tokens.append(merge(curr_type, store))
         store = []
+
+    for index, token in enumerate(tokens):
+        tokens[index] = token[0], token[1], index
+
+    if not validate_paren_tokens(tokens):
+        raise ValueError("Invalid parentheses")
 
     return tokens
