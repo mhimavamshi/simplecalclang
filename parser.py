@@ -210,6 +210,8 @@ class PrattParser:
         elif token[0] == "lparen":
             left = self.expression(0)
             self.advance()
+        # you can add unary here
+        # or a sin function by and funcname token and gathering arguments and making it a left node 
         else:
             raise ValueError(f"Unexpected token: {token}")                
 
@@ -229,8 +231,8 @@ class PrattParser:
                 break
 
             prec = precedence[op[0]]
-            lbp, rbp = prec, prec + 1
-
+            lbp, rbp = prec, prec + 1 # + 1 so left is stronger than right even if same precedence
+            # for right associativity (^ operator, dont increment)
             if lbp < min_bindp:
                 break
 
