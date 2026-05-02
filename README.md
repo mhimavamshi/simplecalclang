@@ -8,6 +8,8 @@ but no exponent (^) operator, and unary operator (-(3 + 4))
 
 Hence we have to handle operator precedence and left-to-right associativity
 
+We make the expressions into typed tokens. Combining them when needed also (like -3 instead of - and 3 separately). Remove all spaces afterwards or not store them. They're only for delimiting. Validate equal number of parentheses. This gives us the list of tokens of the expression to be used for parsing.
+
 There are currently 2 parsing algorithms used:
 + RecursivePrecedenceReduction:
   which is just my shot at a solution (of course, a bad one) without knowledge. \
