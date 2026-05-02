@@ -1,20 +1,25 @@
 import readline
+import traceback
 from tokenizer import tokenize
 from parser import parse
-from AST import print_AST, evaluate_AST
 
 def process(expression):
     tokens = tokenize(expression)    
-    AST = parse(tokens)
-    print_AST(AST)
-    result = evaluate_AST(AST)
-    return result
+    AST = parse(tokens, method="RecursivePrecedenceReduction")
+    AST.print_tree()
+    return AST.evaluate()
 
 def main():
     while True:
-        expression = input("> ")
-        result = process(expression)
-        print(result)
+        try:
+            expression = input("> ")
+            result = process(expression)
+            print(result)
+        except EOFError:
+            break
+        except Exception as e:
+            traceback.print_exc()
+            continue
 
 if __name__ == "__main__":
     main()
