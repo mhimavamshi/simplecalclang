@@ -1,5 +1,6 @@
 # AST Node classes, print AST function, evaluate AST
 
+
 class Node:
     def __init__(self, nodetype, value, left=None, right=None):
         self.nodetype = nodetype
@@ -8,7 +9,7 @@ class Node:
         self.right = right
 
     # def __str__(self):
-    #     return f"Node [{id(self)}]: {self.nodetype}, {self.value} and left: {self.left} [{id(self.left) if self.left else None}], right: {self.right} [{id(self.right) if self.right else None}]"    
+    #     return f"Node [{id(self)}]: {self.nodetype}, {self.value} and left: {self.left} [{id(self.left) if self.left else None}], right: {self.right} [{id(self.right) if self.right else None}]"
 
     def __str__(self):
         if self.nodetype == "value" and isinstance(self.value, tuple):
@@ -21,6 +22,7 @@ class Node:
 
         return f"Node(id={id(self)}, type={self.nodetype}, value={val}, left_id={left_id}, right_id={right_id})"
 
+
 class AST:
     def __init__(self):
         self.nodes = []
@@ -29,7 +31,7 @@ class AST:
 
         self.OPERATION_TYPE = "operation"
         self.VALUE_TYPE = "value"
-    
+
     def add_node(self, operation, left, right):
         if not isinstance(left, Node):
             left = Node(self.VALUE_TYPE, left)
@@ -69,7 +71,7 @@ class AST:
         elif op_type == "operator.divide":
             return left_val / right_val
 
-        raise ValueError(f"Unknown operator: {op_type}")                                                                                                                           
+        raise ValueError(f"Unknown operator: {op_type}")
 
     def print_tree(self, node=None, indent="", is_left=True):
         if node is None:

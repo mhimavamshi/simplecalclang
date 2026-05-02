@@ -3,11 +3,13 @@ import traceback
 from tokenizer import tokenize
 from parser import parse
 
+
 def process(expression):
-    tokens = tokenize(expression)    
+    tokens = tokenize(expression)
     AST = parse(tokens, method="RecursivePrecedenceReduction")
     AST.print_tree()
     return AST.evaluate()
+
 
 def main():
     while True:
@@ -21,6 +23,6 @@ def main():
             traceback.print_exc()
             continue
 
+
 if __name__ == "__main__":
     main()
-
