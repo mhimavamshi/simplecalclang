@@ -5,7 +5,7 @@ from parser import parse
 
 def eval_expr(expr):
     tokens = tokenize(expr)
-    tree = parse(tokens, method="RecursivePrecedenceReduction")
+    tree = parse(tokens, method="PrattParser")
     return tree.evaluate()
 
 def test_simple_add():

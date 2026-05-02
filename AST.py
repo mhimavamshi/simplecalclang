@@ -24,13 +24,16 @@ class Node:
 
 
 class AST:
+    
+    OPERATION_TYPE = "operation"
+    VALUE_TYPE = "value"
+
     def __init__(self):
         self.nodes = []
         self.root = None
         self._last_node = None
 
-        self.OPERATION_TYPE = "operation"
-        self.VALUE_TYPE = "value"
+
 
     def add_node(self, operation, left, right):
         if not isinstance(left, Node):

@@ -6,7 +6,7 @@ from parser import parse
 
 def process(expression):
     tokens = tokenize(expression)
-    AST = parse(tokens, method="RecursivePrecedenceReduction")
+    AST = parse(tokens, method="PrattParser")
     AST.print_tree()
     return AST.evaluate()
 

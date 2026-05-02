@@ -5,7 +5,7 @@ from parser import parse
 
 def test_root_operator():
     tokens = tokenize("1 + 2 * 3")
-    tree = parse(tokens, method="RecursivePrecedenceReduction")
+    tree = parse(tokens, method="PrattParser")
     root = tree._last_node
 
     assert root.value[0] == "operator.plus"
@@ -13,7 +13,7 @@ def test_root_operator():
 
 def test_negative_literal_root():
     tokens = tokenize("-3")
-    tree = parse(tokens, method="RecursivePrecedenceReduction")
+    tree = parse(tokens, method="PrattParser")
     root = tree._last_node
 
     assert root.nodetype == "value"
@@ -22,7 +22,7 @@ def test_negative_literal_root():
 
 def test_negative_addition_structure():
     tokens = tokenize("-3 + 5")
-    tree = parse(tokens, method="RecursivePrecedenceReduction")
+    tree = parse(tokens, method="PrattParser")
     root = tree._last_node
 
     assert root.value[0] == "operator.plus"
@@ -32,7 +32,7 @@ def test_negative_addition_structure():
 
 def test_negative_multiplication_structure():
     tokens = tokenize("-3 * 2")
-    tree = parse(tokens, method="RecursivePrecedenceReduction")
+    tree = parse(tokens, method="PrattParser")
     root = tree._last_node
 
     assert root.value[0] == "operator.multiply"
@@ -42,7 +42,7 @@ def test_negative_multiplication_structure():
 
 def test_negative_inside_parentheses_structure():
     tokens = tokenize("(-3 + 5)")
-    tree = parse(tokens, method="RecursivePrecedenceReduction")
+    tree = parse(tokens, method="PrattParser")
     root = tree._last_node
 
     assert root.value[0] == "operator.plus"
@@ -52,7 +52,7 @@ def test_negative_inside_parentheses_structure():
 
 def test_subtract_negative_structure():
     tokens = tokenize("5 - -3")
-    tree = parse(tokens, method="RecursivePrecedenceReduction")
+    tree = parse(tokens, method="PrattParser")
     root = tree._last_node
 
     assert root.value[0] == "operator.minus"

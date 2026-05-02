@@ -3,10 +3,10 @@
 from AST import AST, Node
 
 precedence = {
-    "operator.plus": 2,
-    "operator.minus": 2,
-    "operator.divide": 1,
-    "operator.multiply": 1,
+    "operator.plus": 1,
+    "operator.minus": 1,
+    "operator.divide": 2,
+    "operator.multiply": 2,
 }
 
 
@@ -136,7 +136,7 @@ class RecursivePrecedenceReduction:
 
             prec = precedence[t[0]]
 
-            if best_idx is None or (prec, i) < (best_prec, best_idx):
+            if best_idx is None or (prec, i) > (best_prec, best_idx):
                 best_idx = i
                 best_prec = prec
 
@@ -174,10 +174,84 @@ class RecursivePrecedenceReduction:
 
         return result
 
+class PrattParser:
+
+    def __init__(self, tokens):
+        self.tokens = tokens
+        self.pos = 0
+
+    def peek(self):
+        if self.pos < len(self.tokens):
+            return self.tokens[self.pos]
+        return None
+
+    def advance(self):
+        t = self.peek()
+        self.pos += 1
+        return t
+
+    def parse(self):
+        return self.expression(0)
+
+
+    def expression(self, min_bindp=0):
+        # first token
+        # figure out what it is
+        # if its int, make a int node
+        # if its minus its unary and put high bp and recurse forward
+        # if its paren, recurse and expect right paren at the end
+
+        token = self.advance()
+        if token is None:
+            raise ValueError("end of input")
+
+        if token[0] == "int":
+            left = Node(AST.VALUE_TYPE, token)
+        elif token[0] == "lparen":
+            left = self.expression(0)
+            self.advance()
+        else:
+            raise ValueError(f"Unexpected token: {token}")                
+
+        # base case:
+        # check if next is op
+        # get the binding power as its the first op
+        # if its operator, check its power against min_bindp
+        # if its greater than or equal add it as an operation node, and recurse again forward with min_bindp + 1 for left associativity
+        # else return back
+        # update right to be the recursed above
+        # create new node with curr left, op, right 
+        # update left to include the new node
+
+        while True:
+            op = self.peek()
+            if op is None or not op[0].startswith("operator"):
+                break
+
+            prec = precedence[op[0]]
+            lbp, rbp = prec, prec + 1
+
+            if lbp < min_bindp:
+                break
+
+            self.advance()
+
+            right = self.expression(min_bindp=rbp)
+            left = Node(AST.OPERATION_TYPE, op, left, right)
+
+        return left
+
 
 def parse(tokens, method):
+    tree = AST()
+
     if method == "RecursivePrecedenceReduction":
         root = RecursivePrecedenceReduction.parse_efficient(tokens)
-        tree = AST()
         tree._last_node = root
+        return tree
+
+    if method == "PrattParser":
+        parser = PrattParser(tokens)
+        root = parser.parse()
+        tree._last_node = root 
         return tree
