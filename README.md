@@ -31,4 +31,5 @@ There are currently 2 parsing algorithms used:
   We peek for operator, check its binding power, if its lower we break into previous call while returning the expression for the previous operator's right. Or else, we parse the right expression recursively again. \
   We advance or consume the token. \
   left and parsed rights are combined into a node and reassigned to left. until the first call's loop which is the AST's root.
-  This gives us the correct AST.
+  This gives us the correct AST.\
+  The benefits of this are nice. You can use the same binding power as left operator to any right operators, so right associativity happens, naturally. You can quickly add functions by parsing them like integers, as the first token at the entry of recursion.  
