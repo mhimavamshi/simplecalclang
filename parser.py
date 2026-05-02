@@ -9,7 +9,7 @@ precedence = {
     "operator.multiply": 2,
 }
 
-
+# this is just my dumb idea. 
 class RecursivePrecedenceReduction:
     """
     Idea:
